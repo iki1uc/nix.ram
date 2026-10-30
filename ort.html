@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ORT · stehen · WURZEL OS</title>
+<style>
+:root{--bg:#030507;--s:#0a1018;--l:#1b2a3a;--t:#d7e2ee;--m:#7d90a4;
+      --gold:#ffd24a;--cy:#22e6ff;--vi:#a78bfa;--g:#3dffa0;--r:#ff5a4d;
+      --ort:#f0b429;--ok:#3fb950;--warn:#d29922;--bad:#f85149}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Consolas,monospace}
+body{background:var(--bg);color:var(--t);max-width:1200px;margin:auto;padding:14px}
+
+/* NC HEADER */
+.kopf-zeile{position:sticky;top:0;z-index:9999;background:rgba(5,5,7,.95);
+  border-bottom:2px solid var(--gold);margin-bottom:14px}
+.kopf-inner{display:flex;justify-content:space-between;align-items:center;
+  gap:12px;padding:10px;flex-wrap:wrap}
+.kopf-brand{color:var(--gold);font-weight:900;letter-spacing:.08em}
+.kopf-nav{display:flex;gap:6px;flex-wrap:wrap}
+.kopf-nav a{color:var(--cy);text-decoration:none;border:1px solid var(--l);
+  padding:4px 10px;font-size:12px;transition:.15s}
+.kopf-nav a:hover{border-color:var(--gold)}
+.kopf-nav a.active{background:var(--gold);color:#000;font-weight:700}
+.kopf-state{color:var(--g);border:1px solid var(--g);padding:4px 8px;font-size:11px;
+  letter-spacing:.1em;transition:.2s}
+.kopf-state.warn{color:var(--gold);border-color:var(--gold)}
+.kopf-state.bad{color:var(--r);border-color:var(--r)}
+.mobile-nav{display:none;width:100%;padding:0 10px 10px}
+#mobile-toggle{width:100%;background:#050507;color:var(--gold);border:1px solid var(--gold);
+  padding:10px;font-weight:700;cursor:pointer;font-family:inherit}
+#mobile-panel{display:none;margin-top:4px;border:1px solid var(--l)}
+#mobile-panel.open{display:grid}
+#mobile-panel a{text-decoration:none;color:var(--cy);padding:10px;
+  border-bottom:1px solid var(--l);font-size:13px}
+#mobile-panel a.active{background:var(--gold);color:#000;font-weight:700}
+
+/* APP */
+main{display:block}
+h1{color:var(--ort);margin-bottom:6px;font-size:26px}
+.sub{color:var(--m);margin-bottom:20px;font-size:12px}
+.box{background:var(--s);border:1px solid var(--l);padding:24px;margin-bottom:16px}
+.current{text-align:center;margin-bottom:20px}
+.current .lbl{font-size:11px;color:var(--m);letter-spacing:.2em;text-transform:uppercase}
+.current .big{font-size:40px;font-weight:700;letter-spacing:.08em;margin:6px 0;color:var(--ort)}
+.current .big.warn{color:var(--warn)}
+.current .big.bad{color:var(--bad)}
+.current .big.ok{color:var(--ok)}
+.states{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.state-btn{background:#090c12;border:1px solid var(--l);border-radius:8px;
+  padding:14px;cursor:pointer;color:var(--m);font-size:12px;font-family:inherit;
+  text-align:center;transition:.15s}
+.state-btn:hover{border-color:#2d3644;color:var(--t)}
+.state-btn.on{background:#131820;color:var(--ort);border-color:var(--ort);
+  font-weight:600;box-shadow:0 0 20px rgba(240,180,41,.15)}
+.perm-lbl{text-align:center;font-size:10px;color:var(--m);letter-spacing:.15em;
+  margin-top:18px;text-transform:uppercase}
+.perms{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:10px}
+.perm{aspect-ratio:1;background:#090c12;border:1px solid var(--l);
+  border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:var(--m);cursor:pointer;transition:.12s;font-weight:600}
+.perm:hover{border-color:#2d3644}
+.perm.on{background:#1c1810;border-color:var(--ort);color:var(--ort);
+  box-shadow:0 0 14px rgba(240,180,41,.2)}
+.info{background:#090c12;border:1px solid var(--l);border-radius:8px;
+  padding:14px;font-size:12px;color:var(--m);line-height:1.8;margin-top:14px}
+.info b{color:var(--t)}
+.info .yes{color:var(--ok)}
+.info .no{color:var(--bad)}
+.nav{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:center}
+.btn{background:var(--s);border:1px solid var(--l);border-radius:7px;
+  padding:11px 20px;color:var(--t);text-decoration:none;font:inherit;font-size:12px;
+  cursor:pointer;transition:.15s}
+.btn:hover{border-color:var(--gold);color:var(--gold)}
+.btn.primary{background:linear-gradient(135deg,#f0b429,#e5534b);border:none;color:#fff;
+  font-weight:700;letter-spacing:.1em;padding:13px 26px}
+.btn.primary:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(240,180,41,.3)}
+footer{margin-top:30px;border-top:1px solid var(--l);padding-top:10px;
+  color:#6e8091;font-size:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media(max-width:760px){.kopf-nav{display:none}.mobile-nav{display:block}}
+</style>
+</head>
+<body>
+
+<header class="kopf-zeile">
+  <div class="kopf-inner">
+    <div class="kopf-brand">● NC.SUITE</div>
+    <nav class="kopf-nav">
+      <a href="./index.html">INDEX</a>
+      <a href="./home.html">HOME</a>
+      <a href="./ort.html" class="active">ORT</a>
+      <a href="./alles.html">ALLES</a>
+      <a href="./nc-suite.html">KERN</a>
+    </nav>
+    <div class="kopf-state" id="brain-state">● BRAIN.EYE.OPEN</div>
+  </div>
+  <div class="mobile-nav">
+    <button id="mobile-toggle" type="button">☰ NODE : ORT</button>
+    <nav id="mobile-panel">
+      <a href="./index.html">INDEX</a>
+      <a href="./home.html">HOME</a>
+      <a href="./ort.html" class="active">ORT</a>
+      <a href="./alles.html">ALLES</a>
+      <a href="./nc-suite.html">KERN</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="page-header">
+    <h1>ORT · stehen</h1>
+    <p class="sub">3 Zustände · LEER → GEWÄHLT → GEHALTEN · 6 PERMS</p>
+  </section>
+
+  <article class="box">
+    <div class="current">
+      <div class="lbl">aktueller Zustand</div>
+      <div class="big" id="big">LEER</div>
+    </div>
+    <div class="states">
+      <button class="state-btn" data-i="0" onclick="set(0)">LEER</button>
+      <button class="state-btn" data-i="1" onclick="set(1)">GEWÄHLT</button>
+      <button class="state-btn" data-i="2" onclick="set(2)">GEHALTEN</button>
+    </div>
+    <div class="perm-lbl">6 PERMS · Finger</div>
+    <div class="perms" id="perms"></div>
+    <div class="info" id="info"></div>
+    <div class="nav">
+      <button class="btn primary" onclick="weiter()">WEITER → ALLES</button>
+      <a href="./home.html" class="btn">← HOME</a>
+      <a href="./index.html" class="btn">Index</a>
+    </div>
+  </article>
+</main>
+
+<footer>
+  <span>© NC.SUITE · WURZEL ×3 · ORT</span>
+  <span style="color:var(--cy);opacity:.7">state sync via wurzel-state.js</span>
+</footer>
+
+<script src="wurzel-state.js"></script>
+<script>
+const PERMS=['HBT','HTB','BHT','BTH','THB','TBH'];
+let selected=new Set();
+function set(i){ WURZEL_STATE.set('ORT',i); render(); }
+function togglePerm(p){
+  selected.has(p)?selected.delete(p):selected.add(p);
+  const n=selected.size;
+  WURZEL_STATE.set('ORT', n===0?0:n<6?1:2);
+  render();
+}
+function render(){
+  const Z=WURZEL_STATE.zustand(), idx=WURZEL_STATE.get('ORT');
+  const big=document.getElementById('big');
+  big.textContent=Z.ORT;
+  big.className='big '+(Z.ORT==='LEER'?'bad':Z.ORT==='GEWÄHLT'?'warn':'ok');
+  document.querySelectorAll('.state-btn').forEach(b=>
+    b.classList.toggle('on',Number(b.dataset.i)===idx));
+  document.getElementById('perms').innerHTML=PERMS.map(p=>
+    `<div class="perm ${selected.has(p)?'on':''}" onclick="togglePerm('${p}')">${p}</div>`
+  ).join('');
+  const n=selected.size;
+  document.getElementById('info').innerHTML=
+    `<b>ORT ${Z.ORT}</b><br>`+
+    `Finger: <span class="${n===6?'yes':'no'}">${n}/6</span><br>`+
+    `Auswahl: <b>${[...selected].join(' · ')||'—'}</b><br>`+
+    `Weiter zu ALLES: <span class="${Z.ORT!=='LEER'?'yes':'no'}">${Z.ORT!=='LEER'?'möglich':'blockiert'}</span>`;
+
+  const hs=document.getElementById('brain-state');
+  if(Z.PRUEF==='FEHLER'||Z.HOME==='CLOSED'||Z.ORT==='LEER'){
+    hs.textContent='● BRAIN.EYE.CLOSED'; hs.className='kopf-state bad';
+  } else if(Z.PRUEF==='UNGEPRUEFT'||Z.HOME==='OPEN'||Z.ORT==='GEWÄHLT'){
+    hs.textContent='● BRAIN.EYE.WAIT';   hs.className='kopf-state warn';
+  } else { hs.textContent='● BRAIN.EYE.OPEN'; hs.className='kopf-state'; }
+}
+function weiter(){
+  if(WURZEL_STATE.getZustand('ORT')==='LEER'){ alert('ORT ist LEER. Bitte erst GEWÄHLT oder GEHALTEN.'); return; }
+  location.href='./alles.html';
+}
+if(window.WURZEL_STATE){ window.WURZEL_STATE.onRemote=render; }
+render();
+</script>
+</body>
+</html>
